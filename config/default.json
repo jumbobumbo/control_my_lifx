@@ -1,0 +1,14 @@
+{
+  "active_hours": {
+     "group_1": {
+      "start": "17:34:00",
+      "end": "11:47:00"
+    }
+  },
+  "lights": {
+    "Bedroom": {
+      "group": "group_1",
+      "color": [750, 1000, 65000, 1000]
+    }
+  }
+}
