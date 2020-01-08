@@ -1,17 +1,21 @@
 from common.config_reader import ReturnConfDict
 from common.connector import ReturnConnectedLights as RCL
 from datetime import datetime
-
+from time import sleep
 
 # config data we are using (blank means default)
 config = ReturnConfDict().json_data
 
-# connect to the light(s)
-with RCL([k for k, v in config["lights"].items()]) as lights:
-    # current light(s) status (off, on, somewhere in between)
-    light_status = [light.get_power() for light in lights.devices]
+# # do we turn the light on or off?
+# light_on = True if config["active_hours"]["group_1"]["start"] <= datetime.now().strftime("%H:%M:%S") <= \
+#                    config["active_hours"]["group_1"]["end"] else False
 
-    # do we turn the light on or off?
-    if datetime.now().strftime("%H:%M:%S") >= config["active_hours"]["group_1"]["start"]:
-        # TODO: include end time - include light status here too
-        pass
+# connect to the light(s)
+with RCL([k for k, _ in config["lights"].items()]) as lights:
+    for light in lights.devices:
+        print(light.color)
+        if light.color[2] < config["lights"][light.label]["color"][2]:
+            light.set_color(config["lights"][light.label]["color"])
+        else:
+            light.set_color([0, 0, 0, 0])
+
